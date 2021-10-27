@@ -79,18 +79,18 @@ for x in range(1,10):
         a, b = len(dna3), len(dna4)
         result = -sys.maxsize
         # a-b개 만큼 빈칸 삽입
-        for blank in combinations_with_replacement(range(b + 1), a - b):
+        for gap in combinations_with_replacement(range(b + 1), a - b):
             dna5 = ""
             i = 0
             score = 0
             while i < b:
-                if i in blank:
-                    dna5 += "-" * blank.count(i) + dna4[i]
+                if i in gap:
+                    dna5 += "-" * gap.count(i) + dna4[i]
                     i += 1
                 else:
                     dna5 += dna4[i]
                     i += 1
-            dna5 += "-" * blank.count(b)
+            dna5 += "-" * gap.count(b)
 
             for j in range(a):
                 if dna3[j] == dna5[j]:
