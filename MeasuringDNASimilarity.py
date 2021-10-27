@@ -1,5 +1,8 @@
 import random
+import sys
 import time
+from itertools import combinations_with_replacement
+
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
@@ -16,17 +19,20 @@ def score(a, b, c):
 
 
 DNA = ["A","T","G","C"]
-time_list = []
+dp_time_list = []
+bf_time_list = []
 
-for x in range(1,21):
+for x in range(1,10):
+
+
     start_time = time.time()  # 측정 시작
-    for _ in range(10):
+    for _ in range(5):
 
         dna1 = "_"
         dna2 = "_"
-        for i in range(100*x):
+        for i in range(3*x):
             dna1 += random.choice(DNA)
-        for j in range(50*x):
+        for j in range(1*x):
             dna2 += random.choice(DNA)
 
         a, b = len(dna1), len(dna2)
@@ -54,29 +60,70 @@ for x in range(1,21):
                 else:
                     table[i][j] = score(table[i-1][j-1], table[i-1][j]-1, table[i][j-1]-1)
     end_time = time.time()  # 측정 종료
-    time_list.append((end_time-start_time)/10)
+    dp_time_list.append((end_time-start_time)/5)
+
+
+
+for x in range(1,10):
+
+   # brute force
+    start_time = time.time()  # 측정 시작
+    for _ in range(5):
+        dna3 = ""
+        dna4 = ""
+        for i in range(3 * x):
+            dna3 += random.choice(DNA)
+        for j in range(1 * x):
+            dna4 += random.choice(DNA)
+
+        a, b = len(dna3), len(dna4)
+        result = -sys.maxsize
+        # a-b개 만큼 빈칸 삽입
+        for blank in combinations_with_replacement(range(b + 1), a - b):
+            dna5 = ""
+            i = 0
+            score = 0
+            while i < b:
+                if i in blank:
+                    dna5 += "-" * blank.count(i) + dna4[i]
+                    i += 1
+                else:
+                    dna5 += dna4[i]
+                    i += 1
+            dna5 += "-" * blank.count(b)
+
+            for j in range(a):
+                if dna3[j] == dna5[j]:
+                    score += 1
+                elif dna3[j] == "-":
+                    score -= 1
+
+            result = max(result, score)
+    end_time = time.time()  # 측정 종료
+    bf_time_list.append((end_time-start_time)/5)
+
 
 
 def mn_func(mn, a, b):
     return a * mn + b
 
-x_data = [100*50*(x**2) for x in range(1,21)]
-y_data = time_list
-
-plt.scatter(x_data, y_data, label = 'mean_data')
+x_data = [3*1*(x**2) for x in range(1,10)]
+y_dp_data = dp_time_list
+y_bf_data = bf_time_list
+plt.scatter(x_data, y_dp_data, label = 'DP_data')
+plt.scatter(x_data, y_bf_data, edgecolors="b", label = 'BF_data')
 
 x = np.array(x_data, dtype=float)
-y = np.array(y_data, dtype=float)
+y = np.array(y_dp_data, dtype=float)
 
 popt, pcov = curve_fit(mn_func,x,y)
 a, b = popt[0], popt[1]
-print(a,b)
-curve_x = np.linspace(5000, 2000000,100)
+curve_x = np.linspace(1, 300,10)
 curve_y = mn_func(curve_x, a, b)
 plt.plot(curve_x, curve_y,'r',label='curve fitting')
 plt.xlabel('m*n')
 plt.ylabel('time')
 plt.title("Measuring time complexity")
 plt.legend()
-
+#
 plt.show()
