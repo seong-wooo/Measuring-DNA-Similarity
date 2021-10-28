@@ -47,9 +47,6 @@ for gap in combinations_with_replacement(range(b+1), a-b):
 
     # 최종 결과는 score의 최댓값
     result = max(result, score)
-    
+
 print(f"점수는 {result}점 입니다.")
-
-
-
 

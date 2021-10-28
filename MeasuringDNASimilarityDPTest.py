@@ -76,6 +76,12 @@ while i != 0 and j != 0:
         dna = "-" + dna
         j -= 1
 
+if i > 0:
+    dna = "-" * i + dna
+else:
+    dna = "-" * j + dna
 print(dna1[1:])
 print(dna)
 
+for d in table:
+    print(d)

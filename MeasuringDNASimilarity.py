@@ -15,8 +15,6 @@ def score(a, b, c):
     else:
         return c
 
-# dna1과 dna2가 주어졌을 때 점수 및 dna2를 어떻게 수정하면 될 지
-
 
 DNA = ["A","T","G","C"]
 dp_time_list = []
@@ -113,17 +111,15 @@ y_bf_data = bf_time_list
 plt.scatter(x_data, y_dp_data, label = 'DP_data')
 plt.scatter(x_data, y_bf_data, edgecolors="b", label = 'BF_data')
 
-x = np.array(x_data, dtype=float)
-y = np.array(y_dp_data, dtype=float)
-
-popt, pcov = curve_fit(mn_func,x,y)
-a, b = popt[0], popt[1]
-curve_x = np.linspace(1, 300,10)
-curve_y = mn_func(curve_x, a, b)
-plt.plot(curve_x, curve_y,'r',label='curve fitting')
+# x = np.array(x_data, dtype=float)
+# y = np.array(y_dp_data, dtype=float)
+# popt, pcov = curve_fit(mn_func,x,y)
+# a, b = popt[0], popt[1]
+# curve_x = np.linspace(1, 300,10)
+# curve_y = mn_func(curve_x, a, b)
+# plt.plot(curve_x, curve_y,'r',label='curve fitting')
 plt.xlabel('m*n')
 plt.ylabel('time')
 plt.title("Measuring time complexity")
 plt.legend()
-#
 plt.show()
